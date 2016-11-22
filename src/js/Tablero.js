@@ -25,7 +25,7 @@ var Tablero = React.createClass({
 			let fila = valoresFila.map(function(valor, indiceColumna){
 				let mykey = "" + indiceFila + indiceColumna;
 				return (<Casilla valor ={valor} indiceFila={indiceFila}
-					indiceColumna={indiceColumna} key={mykey} manejadorClick={this.tableroClick}/>
+					indiceColumna={indiceColumna} key={mykey} manejadorClick={this.tableroClick} />
 				)
 			}, this);
 			return(
