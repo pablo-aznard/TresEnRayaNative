@@ -3,6 +3,7 @@ import {Navigator} from 'react-native';
 
 import IndexScene from '../../inicio';
 import PartidaScene from '../../partida';
+import InfoScene from '../../info';
 
 const Cabecera = require('./Cabecera');
 const Tablero = require('./Tablero');
@@ -10,6 +11,7 @@ const Tablero = require('./Tablero');
 const JugadorX = "jugador 1 - las X";
 const Jugador0 = "jugador 2 - los 0";
 const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
+const historico = [];
 var fin = 0;
 
 var App = React.createClass({
@@ -17,6 +19,7 @@ var App = React.createClass({
 		return{
 			turno: JugadorX,
 			valores: VALORES,
+			historico: historico,
 			fin: fin
 		};
 	},
@@ -74,11 +77,13 @@ var App = React.createClass({
 		if (fin < 1) {
 			let valores = this.state.valores;
 			let nuevoValor = this.state.turno === JugadorX ? 'X' : '0';
+			let hist = this.state.historico;
 			valores[numeroFila][numeroColumna] = nuevoValor;
 			//cada vez que se hace un setState se ejecuta el render
 			this.setState({
 				turno: this.state.turno === JugadorX ? Jugador0 : JugadorX,
-				valores: this.state.valores
+				valores: this.state.valores,
+				historico: hist.push(nuevoValor + " seleccionó la casilla ["+numeroFila+"]["+numeroColumna+"]")
 			});
 			if (this.winner()) {
 				fin += 1;
@@ -100,6 +105,7 @@ var App = React.createClass({
 		const routes = [
 			{title:'Index', index: 0},
 			{title:'Partida', index:1},
+			{title:'Info', index:2}
 		];
 		return (
 			<Navigator
@@ -121,7 +127,9 @@ var App = React.createClass({
 						case 0:
 							return <IndexScene onForward = {onForward} onBack={onBack} />
 						case 1:
-							return <PartidaScene manejadorTableroClick={this.appClick} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
+							return <PartidaScene manejadorTableroClick={this.appClick} hist={this.state.historico} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
+						case 2:
+							return <InfoScene onForward = {onForward} onBack={onBack} />
 					}
 				}}
 			/>
