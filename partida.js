@@ -4,7 +4,7 @@ import MyButton from './src/js/MyButton';
 
 const Cabecera = require('./src/js/Cabecera');
 const Tablero = require('./src/js/Tablero');
-const historico = ["patata"];
+const historico = [" "];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
 
@@ -20,8 +20,15 @@ var PartidaScene = React.createClass({
         this.setState({dataSource: dataSource});
     },
 
+    reset: function () {
+        this.props.reset();
+        historico = [" "];
+        dataSource = ds.cloneWithRows(historico);
+        this.setState({dataSource: dataSource});
+    },
+
     clickUpdate: function (numeroFila, numeroColumna) {
-        historico.push(this.props.turno);
+        historico.push(this.props.turno + " seleccionó la casilla ");
         console.log(historico);
         // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
         dataSource = ds.cloneWithRows(historico);
@@ -41,11 +48,14 @@ var PartidaScene = React.createClass({
 
     render:function(){
         return (
-            <View style = {{flex: 1, margin: 10}}>
+            <View style = {{flex: 1, margin: 10, flexDirection: 'column'}}>
                 <Cabecera texto = {this.props.turno}/>
-                <Tablero valores = {this.props.valores} manejadorTableroClick={this.clickUpdate}/>
-                <ListView dataSource={this.state.dataSource} renderRow={this._renderRow} />
-                <MyButton onPress = {this.props.onBack} text = {"Volver"}/>
+                <Tablero style = {{flex: 1}} valores = {this.props.valores} manejadorTableroClick={this.clickUpdate}/>
+                <ListView style = {{flex: 4}} dataSource={this.state.dataSource} renderRow={this._renderRow} />
+                <View style = {{flexDirection: 'row', justifyContent: 'space-around'}}>
+                    <MyButton onPress = {this.props.onBack} text = {"Volver"}/>
+                    <MyButton onPress = {this.reset} text = {"Reiniciar"}/>
+                </View>
             </View>
         )
     }

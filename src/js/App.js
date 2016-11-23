@@ -129,7 +129,7 @@ var App = React.createClass({
 						case 0:
 							return <IndexScene onForward = {onForward} onBack={onBack} />
 						case 1:
-							return <PartidaScene manejadorTableroClick={this.appClick} hist={this.state.historico} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
+							return <PartidaScene reset={this.reset} manejadorTableroClick={this.appClick} hist={this.state.historico} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
 					}
 				}}
 			/>
