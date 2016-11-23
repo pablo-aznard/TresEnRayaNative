@@ -10,12 +10,10 @@ const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
 
 var PartidaScene = React.createClass({
     getInitialState: function () {
-        // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
         return {dataSource: ds};
     },
 
     componentDidMount: function () {
-        // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
         dataSource = ds.cloneWithRows(historico);
         this.setState({dataSource: dataSource});
     },
@@ -28,9 +26,8 @@ var PartidaScene = React.createClass({
     },
 
     clickUpdate: function (numeroFila, numeroColumna) {
-        historico.push(this.props.turno + " seleccionó la casilla ");
+        historico.push(this.props.turno + " seleccionó la casilla ["+numeroFila+"]["+numeroColumna+"]");
         console.log(historico);
-        // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
         dataSource = ds.cloneWithRows(historico);
 
         this.setState({dataSource: dataSource});
