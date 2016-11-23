@@ -3,7 +3,6 @@ import {Navigator} from 'react-native';
 
 import IndexScene from '../../inicio';
 import PartidaScene from '../../partida';
-import InfoScene from '../../info';
 
 const Cabecera = require('./Cabecera');
 const Tablero = require('./Tablero');
@@ -69,6 +68,7 @@ var App = React.createClass({
 		this.setState({
 			turno: this.state.turno = JugadorX,
 			valores: this.state.valores = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']],
+			historico: this.state.historico = [],
 			fin: fin = 0
 		});
 	},
@@ -79,12 +79,14 @@ var App = React.createClass({
 			let nuevoValor = this.state.turno === JugadorX ? 'X' : '0';
 			let hist = this.state.historico;
 			valores[numeroFila][numeroColumna] = nuevoValor;
+			hist.push(nuevoValor + " seleccionó la casilla ["+numeroFila+"]["+numeroColumna+"]");
 			//cada vez que se hace un setState se ejecuta el render
 			this.setState({
 				turno: this.state.turno === JugadorX ? Jugador0 : JugadorX,
 				valores: this.state.valores,
-				historico: hist.push(nuevoValor + " seleccionó la casilla ["+numeroFila+"]["+numeroColumna+"]")
+				historico: hist
 			});
+
 			if (this.winner()) {
 				fin += 1;
 				this.showAlert();
@@ -128,8 +130,6 @@ var App = React.createClass({
 							return <IndexScene onForward = {onForward} onBack={onBack} />
 						case 1:
 							return <PartidaScene manejadorTableroClick={this.appClick} hist={this.state.historico} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
-						case 2:
-							return <InfoScene onForward = {onForward} onBack={onBack} />
 					}
 				}}
 			/>

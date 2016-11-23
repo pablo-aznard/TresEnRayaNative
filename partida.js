@@ -4,20 +4,32 @@ import MyButton from './src/js/MyButton';
 
 const Cabecera = require('./src/js/Cabecera');
 const Tablero = require('./src/js/Tablero');
-var app = require('./src/js/App');
+const historico = ["patata"];
 
-const JugadorX = "jugador 1 - las X";
-const Jugador0 = "jugador 2 - los 0";
-const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
-var fin = 0;
+const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
 
 var PartidaScene = React.createClass({
     getInitialState: function () {
-        const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
-        this.setState({dataSource: ds.cloneWithRows(this.props.hist)});
-        return {dataSource: ds.cloneWithRows(this.props.hist)};
+        // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+        return {dataSource: ds};
     },
 
+    componentDidMount: function () {
+        // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+        dataSource = ds.cloneWithRows(historico);
+        this.setState({dataSource: dataSource});
+    },
+
+    clickUpdate: function (numeroFila, numeroColumna) {
+        historico.push(this.props.turno);
+        console.log(historico);
+        // const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
+        dataSource = ds.cloneWithRows(historico);
+
+        this.setState({dataSource: dataSource});
+
+        this.props.manejadorTableroClick(numeroFila, numeroColumna);
+    },
 
     _renderRow: function (rowData) {
         return(
@@ -31,7 +43,7 @@ var PartidaScene = React.createClass({
         return (
             <View style = {{flex: 1, margin: 10}}>
                 <Cabecera texto = {this.props.turno}/>
-                <Tablero valores = {this.props.valores} manejadorTableroClick={this.props.manejadorTableroClick}/>
+                <Tablero valores = {this.props.valores} manejadorTableroClick={this.clickUpdate}/>
                 <ListView dataSource={this.state.dataSource} renderRow={this._renderRow} />
                 <MyButton onPress = {this.props.onBack} text = {"Volver"}/>
             </View>
