@@ -4,7 +4,7 @@ import MyButton from './src/js/MyButton';
 
 const Cabecera = require('./src/js/Cabecera');
 const Tablero = require('./src/js/Tablero');
-const historico = [" "];
+const historico = [];
 
 const ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 !== r2});
 
@@ -22,46 +22,45 @@ var PartidaScene = React.createClass({
     },
 
     _saveData: async function (key, value) {
-        try {
-            console.log("intento guardar");
-            await AsyncStorage.setItem(key,value);
-        } catch (error) {
-            console.log(error);
-            // Error saving data
-        }
-    },
+  			try {
+  					console.log("intento guardar");
+  					await AsyncStorage.setItem(key,value);
+  			} catch (error) {
+  					console.log(error);
+  					// Error saving data
+  			}
+  	},
 
-    _loadData: async function(key){
-        console.log("_loadData");
-        try {
-            var aux = [];
-            let value = await AsyncStorage.getItem(key);
-            console.log(value);
-            for (var i=0; i < 3; i++){
-                var str = value.substr(6*i, 5);
-                aux.push(str.split(','));
-            }
-            console.log(aux);
-            return aux;
-        } catch (error) {
-            console.log(error);
-            // Error retrieving data
-        }
-    },
+  	_loadData: async function(key){
+  			console.log("_loadData");
+  			try {
+					let value = await AsyncStorage.getItem(key);
+					console.log(value);
+					return value.split(",");
+  			} catch (error) {
+  					console.log(error);
+  			}
+  	},
 
-    save: async function() {
-        console.log('save');
-        this._saveData("valores", ""+this.props.valores);
-    },
+  	save: async function() {
+  			console.log('save');
+  			this._saveData("historico", ""+historico);
 
-    load: async function () {
-        console.log('load');
-        var aux = this._loadData("valores");
-        this.setState({
-            valores: this.state.valores = await aux
-        });
-        console.log(this.state.valores);
-    },
+        this.props.save();
+  	},
+
+  	load: async function () {
+  			console.log('load');
+  			historico = this._loadData("historico");
+        historico = Object.values(await historico);
+        console.log(await historico);
+        dataSource = await ds.cloneWithRows(historico);
+  			this.setState({
+  					dataSource: this.state.dataSource = await dataSource
+  			});
+
+        this.props.load();
+  	},
 
     reset: function () {
         this.props.reset();
@@ -72,7 +71,6 @@ var PartidaScene = React.createClass({
 
     clickUpdate: function (numeroFila, numeroColumna) {
         historico.push(this.props.turno + " seleccionó la casilla ["+numeroFila+"]["+numeroColumna+"]");
-        console.log(historico);
         dataSource = ds.cloneWithRows(historico);
 
         this.setState({dataSource: dataSource});
@@ -89,10 +87,11 @@ var PartidaScene = React.createClass({
     },
 
     render:function(){
+        console.log("partida.js render");
         return (
             <View style = {{flex: 1, margin: 10, flexDirection: 'column'}}>
                 <Cabecera texto = {this.props.turno}/>
-                <Tablero style = {{flex: 1}} valores = {this.state.valores} manejadorTableroClick={this.clickUpdate}/>
+                <Tablero style = {{flex: 1}} valores = {this.props.valores} manejadorTableroClick={this.clickUpdate}/>
                 <ListView style = {{flex: 4}} dataSource={this.state.dataSource} renderRow={this._renderRow} />
                 <View style = {{flexDirection: 'column', justifyContent: 'space-around'}}>
                     <View style = {{flexDirection: 'row', justifyContent: 'space-around'}}>
