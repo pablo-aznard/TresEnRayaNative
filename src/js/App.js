@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Navigator} from 'react-native';
+import {Navigator,  AsyncStorage} from 'react-native';
 
 import IndexScene from '../../inicio';
 import PartidaScene from '../../partida';
@@ -80,16 +80,54 @@ var App = React.createClass({
 		}
 	},
 
+	_saveData: async function (key, value) {
+			try {
+					console.log("intento guardar");
+					await AsyncStorage.setItem(key,value);
+			} catch (error) {
+					console.log(error);
+					// Error saving data
+			}
+	},
+
+	_loadData: async function(key){
+			console.log("_loadData");
+			try {
+					if (key === "valores") {
+						var aux = [];
+						let value = await AsyncStorage.getItem(key);
+						console.log(value);
+						for (var i=0; i < 3; i++){
+								var str = value.substr(6*i, 5);
+								aux.push(str.split(','));
+						}
+						console.log(aux);
+						return aux;
+					} else {
+						return await AsyncStorage.getItem(key);
+					}
+			} catch (error) {
+					console.log(error);
+					// Error retrieving data
+			}
+	},
+
+	save: async function() {
+			console.log('save');
+			this._saveData("valores", ""+this.state.valores);
+	},
+
+	load: async function () {
+			console.log('load');
+			var aux = this._loadData("valores");
+			this.setState({
+					valores: this.state.valores = await aux
+			});
+			console.log(this.state.valores);
+	},
 
 	render: function(){
-		// var texto = "Turno del " +this.state.turno;
-		// return (
-		// 	<View style={{flex: 1, margin: 10}}>
-		// 		<Cabecera texto={texto}/>
-		// 		<Tablero valores={this.state.valores}
-		// 			manejadorTableroClick={this.appClick}/>
-		// 	</View>
-		// )
+		console.log("App.js render");
 		const routes = [
 			{title:'Index', index: 0},
 			{title:'Partida', index:1},
@@ -115,7 +153,7 @@ var App = React.createClass({
 						case 0:
 							return <IndexScene onForward = {onForward} onBack={onBack} />
 						case 1:
-							return <PartidaScene reset={this.reset} manejadorTableroClick={this.appClick} hist={this.state.historico} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
+							return <PartidaScene reset={this.reset} manejadorTableroClick={this.appClick} save={this.save} load={this.load} hist={this.state.historico} valores={this.state.valores} turno={this.state.turno} onForward={onForward} onBack={onBack}/>
 					}
 				}}
 			/>
