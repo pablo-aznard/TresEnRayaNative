@@ -9,7 +9,7 @@ const Tablero = require('./Tablero');
 
 const JugadorX = "jugador 1 - las X";
 const Jugador0 = "jugador 2 - los 0";
-const VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
+var VALORES = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']];
 const historico = [];
 var fin = 0;
 
@@ -22,20 +22,6 @@ var App = React.createClass({
 			fin: fin
 		};
 	},
-
-	//
-	// componentDidMount(){
-	// 	TresEnRayaStore.addChangeListener(this._onChange);
-	// },
-	//
-	// componentWillUnmount(){
-	// 	TresEnRayaStore.removeChangeListener(this._onChange);
-	// },
-	//
-	// _onChange: function(){
-	// 	var newState = TresEnRayaStore.getState();
-	// 	this.setState(newState);
-	// },
 
 	showAlert:function(){
 		if (fin == 1)
