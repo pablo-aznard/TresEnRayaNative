@@ -52,6 +52,10 @@ var PartidaScene = React.createClass({
   	load: async function () {
   			console.log('load');
   			historico = this._loadData("historico");
+<<<<<<< HEAD
+=======
+        // historico = Object.values(historico);
+>>>>>>> e38e5f9c86f3907b9b5a178cbbbfc6e94a3dbbf1
         historico = Object.values(await historico);
         console.log(await historico);
         dataSource = await ds.cloneWithRows(historico);

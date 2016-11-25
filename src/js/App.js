@@ -104,7 +104,11 @@ var App = React.createClass({
 						console.log(aux);
 						return aux;
 					} else {
+<<<<<<< HEAD
 						return AsyncStorage.getItem(key);
+=======
+						return await AsyncStorage.getItem(key);
+>>>>>>> e38e5f9c86f3907b9b5a178cbbbfc6e94a3dbbf1
 					}
 			} catch (error) {
 					console.log(error);
@@ -115,16 +119,24 @@ var App = React.createClass({
 	save: async function() {
 			console.log('save');
 			this._saveData("valores", ""+this.state.valores);
+<<<<<<< HEAD
 			this._saveData("turno", this.state.turno);
+=======
+>>>>>>> e38e5f9c86f3907b9b5a178cbbbfc6e94a3dbbf1
 	},
 
 	load: async function () {
 			console.log('load');
 			var aux = this._loadData("valores");
+<<<<<<< HEAD
 			var tur = this._loadData("turno");
 			this.setState({
 					valores: this.state.valores = await aux,
 					turno: this.state.turno = await tur
+=======
+			this.setState({
+					valores: this.state.valores = await aux
+>>>>>>> e38e5f9c86f3907b9b5a178cbbbfc6e94a3dbbf1
 			});
 			console.log(this.state.valores);
 	},
